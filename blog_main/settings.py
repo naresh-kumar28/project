@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'blogs',
 ]
 
 MIDDLEWARE = [
@@ -114,8 +115,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_URL = 'static/'      #Browser me URL banana
+
 STATICFILES_DIRS = [
-    'blog_main/static',
+    BASE_DIR / "static"     #Development me files yaha dhundhni hain
 ]
+
+STATIC_ROOT = BASE_DIR / "staticfiles" #Production me sab files yaha collect hongi
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
