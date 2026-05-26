@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blogs',
     'assignments',
+    'crispy_forms',
+    'crispy_bootstrap4',
 ]
 
 MIDDLEWARE = [
@@ -121,7 +123,7 @@ USE_TZ = True
 STATIC_URL = 'static/'      #Browser me URL banana
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static"     #Development me files yaha dhundhni hain
+    BASE_DIR / "blog_main" / "static"     #Development me files yaha dhundhni hain
 ]
 
 STATIC_ROOT = BASE_DIR / "staticfiles" #Production me sab files yaha collect hongi
@@ -129,3 +131,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles" #Production me sab files yaha collect hon
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
