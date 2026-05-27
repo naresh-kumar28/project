@@ -1,8 +1,12 @@
+import re
 from django.shortcuts import get_object_or_404, render, redirect
 from blogs.models import Blog, Category
 from django.contrib.auth.decorators import login_required
-from .forms import CategoryForm, BlogPostForm
+from .forms import CategoryForm, BlogPostForm, AddUserForm, EditUserForm
 from django.utils.text import slugify
+from django.contrib.auth.models import User
+from django.contrib import messages
+
 
 # Create your views here.
 
@@ -122,3 +126,62 @@ def delete_post(request, pk):
     post.delete()
     return redirect('posts')
 
+
+@login_required(login_url='login')
+def users(request):
+    users = User.objects.all()
+    context = {
+        'users': users
+    }
+    return render(request, 'dashboard/users.html', context)
+
+@login_required(login_url='login')
+def add_user(request):
+    if request.method == 'POST':
+        form = AddUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('users')
+    else:
+        form = AddUserForm()
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'dashboard/add_user.html', context)
+
+
+def edit_user(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        form = EditUserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('users')
+    else:
+        form = EditUserForm(instance=user)
+
+    context = {
+        'form': form,
+        'user': user,
+    }
+    return render(request, 'dashboard/edit_user.html', context)
+
+
+def delete_user(request, pk):
+    user = get_object_or_404(User, pk=pk)
+
+    # Manager khud ko delete na kar sake
+    if request.user == user:
+        messages.error(request, "You cannot delete your own account.")
+        return redirect('users')
+
+    # Superuser ko delete na kar sake
+    if user.is_superuser:
+        messages.error(request, "Superuser cannot be deleted.")
+        return redirect('users')
+    
+    user.delete()
+    messages.success(request, "User deleted successfully.")
+    return redirect('users')
